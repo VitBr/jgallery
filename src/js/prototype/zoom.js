@@ -407,68 +407,68 @@ var Zoom = ( function( jLoader, overlay, historyPushState, jGalleryTransitions, 
             } );            
         },
 
-        setImgSizeForFit: function( $img ) {
-            var intNavBottomHeight = this.jGallery.isSlider() ? 0 : this.$container.find( '.nav-bottom' ).outerHeight();
-            var isThumbnailsVisible = ! this.jGallery.isSlider() && ! this.thumbnails.getElement().is( '.hidden' );
+        setImgSizeForFit: function ($img) {
+            var intNavBottomHeight = this.jGallery.isSlider() ? 0 : this.$container.find('.nav-bottom').outerHeight();
+            var isThumbnailsVisible = !this.jGallery.isSlider() && !this.thumbnails.getElement().is('.hidden');
 
-            $img.css( {
-                'width': 'auto',
-                'height': 'auto',
+            var canvas_width = isThumbnailsVisible && this.thumbnails.isVertical() ? this.$jGallery.width() - this.thumbnails.getElement().outerWidth(true) : this.$jGallery.width();
+            var canvas_height = isThumbnailsVisible && this.thumbnails.isHorizontal() ? this.$jGallery.height() - this.thumbnails.getElement().outerHeight(true) - intNavBottomHeight : this.$jGallery.height() - intNavBottomHeight;
+            var canvas_ratio = canvas_width / canvas_height;
+            var img_ratio = $img.width() / $img.height()
+            var width, height;
+
+            if (img_ratio <= canvas_ratio) {
+                height = canvas_height;
+                width = Math.round(height * img_ratio);
+            } else {
+                width = canvas_width;
+                height = Math.round(width / img_ratio);
+            }
+
+            $img.css({
+                'width': width,
+                'height': height,
                 'min-width': 0,
                 'min-height': 0,
-                'max-width': isThumbnailsVisible && this.thumbnails.isVertical() ? this.$jGallery.width() - this.thumbnails.getElement().outerWidth( true ) : this.$jGallery.width(),
-                'max-height': isThumbnailsVisible && this.thumbnails.isHorizontal() ? this.$jGallery.height() - this.thumbnails.getElement().outerHeight( true ) - intNavBottomHeight : this.$jGallery.height() - intNavBottomHeight
-            } );   
-            if ( $img.width() / $img.height() / this.jGallery.getCanvasRatioWidthToHeight() < 1 ) {
-                $img.css( {
-                    'width': 'auto',
-                    'height': isThumbnailsVisible && this.thumbnails.isHorizontal() ? this.$jGallery.height() - this.thumbnails.getElement().outerHeight( true ) - intNavBottomHeight : this.$jGallery.height() - intNavBottomHeight
-                } );                        
-            }
-            else {
-                $img.css( {
-                    'width': isThumbnailsVisible && this.thumbnails.isVertical() ? this.$jGallery.width() - this.thumbnails.getElement().outerWidth( true ) : this.$jGallery.width(),
-                    'height': 'auto'
-                } );
-            }             
-            $img.css( {
-                'margin-top': - $img.height() / 2,
-                'margin-left': - $img.width() / 2
-            } );
+                'max-width': 'none',
+                'max-height': 'none'
+            });
+            $img.css({
+                'margin-top': -$img.height() / 2,
+                'margin-left': -$img.width() / 2
+            });
         },
 
-        setImgSizeForFill: function( $img ) {
-            var intNavBottomHeight = this.jGallery.isSlider() ? 0 : this.$container.find( '.nav-bottom' ).outerHeight();
-            var isThumbnailsVisible = ! this.jGallery.isSlider() && ! this.thumbnails.getElement().is( '.hidden' );
+        setImgSizeForFill: function ($img) {
+            var intNavBottomHeight = this.jGallery.isSlider() ? 0 : this.$container.find('.nav-bottom').outerHeight();
+            var isThumbnailsVisible = !this.jGallery.isSlider() && !this.thumbnails.getElement().is('.hidden');
 
-            $img.css( {
-                'width': 'auto',
-                'height': 'auto',
-                'max-width': 'none',
-                'max-height': 'none',                    
+            var canvas_width = isThumbnailsVisible && this.thumbnails.isVertical() ? this.$jGallery.width() - this.thumbnails.getElement().outerWidth(true) : this.$jGallery.width();
+            var canvas_height = isThumbnailsVisible && this.thumbnails.isHorizontal() ? this.$jGallery.height() - this.thumbnails.getElement().outerHeight(true) - intNavBottomHeight : this.$jGallery.height() - intNavBottomHeight;
+            var canvas_ratio = canvas_width / canvas_height;
+            var img_ratio = $img.width() / $img.height()
+            var width, height;
+
+            if (img_ratio <= canvas_ratio) {
+                width = canvas_width;
+                height = Math.round(width / img_ratio);
+            } else {
+                height = canvas_height;
+                width = Math.round(height * img_ratio);
+            }
+
+            $img.css({
+                'width': width,
+                'height': height,
                 'min-width': 0,
-                'min-height': 0
-            } );
-            if ( $img.width() / $img.height() / this.jGallery.getCanvasRatioWidthToHeight() > 1 ) {
-                $img.css( {
-                    'width': 'auto',
-                    'height': isThumbnailsVisible && this.thumbnails.isHorizontal() ? this.$jGallery.height() - this.thumbnails.getElement().outerHeight( true ) - intNavBottomHeight : this.$jGallery.height() - intNavBottomHeight
-                } );                        
-            }
-            else {
-                $img.css( {
-                    'width': isThumbnailsVisible && this.thumbnails.isVertical() ? this.$jGallery.width() - this.thumbnails.getElement().outerWidth( true ) : this.$jGallery.width(),
-                    'height': 'auto'
-                } );
-            }
-            $img.css( {                   
-                'min-width': isThumbnailsVisible && this.thumbnails.isVertical() ? this.$jGallery.width() - this.thumbnails.getElement().outerWidth( true ) : this.$jGallery.width(),
-                'min-height': isThumbnailsVisible && this.thumbnails.isHorizontal() ? this.$jGallery.height() - this.thumbnails.getElement().outerHeight( true ) - intNavBottomHeight : this.$jGallery.height() - intNavBottomHeight
-            } );
-            $img.css( {
-                'margin-top': - $img.height() / 2,
-                'margin-left': - $img.width() / 2
-            } );
+                'min-height': 0,
+                'max-width': 'none',
+                'max-height': 'none'
+            });
+            $img.css({
+                'margin-top': -$img.height() / 2,
+                'margin-left': -$img.width() / 2
+            });
         },
 
         isAddedToLoad: function( $a ) {
